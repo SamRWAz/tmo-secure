@@ -387,10 +387,10 @@ export function MangaDetailPage() {
                   const unlocked = isActiveSubscription || !isPremium || isChapterUnlocked(ch.id)
                   return (
                     <li key={ch.id}>
-                      <button
+                        <button
                         type="button"
                         onClick={() => handleChapterClick(ch)}
-                        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-sm transition-colors hover:bg-white/[0.04] sm:px-5"
+                        className="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-3.5 text-left text-sm transition-colors hover:bg-white/[0.04] sm:flex-nowrap sm:px-5"
                       >
                         <span className="flex min-w-0 items-center gap-2.5">
                           {unlocked ? <VerifiedPawIcon /> : <span className="text-amber-400/80 text-xs">🔒</span>}
@@ -400,7 +400,7 @@ export function MangaDetailPage() {
                         </span>
                         {ch.unsafeRoute ? (
                           <span className="shrink-0 rounded-full bg-amber-500/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-100 ring-1 ring-amber-400/40">
-                            Redirect (demo)
+                            Redirect
                           </span>
                         ) : unlocked ? (
                           <span className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-cyan-400/90">

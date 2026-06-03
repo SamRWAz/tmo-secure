@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigationType } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useUser } from '../context/UserContext'
 import { AuthModal } from './AuthModal'
 import { DonateModal } from './DonateModal'
@@ -13,6 +13,30 @@ const navLink =
 
 const navLinkActive =
   'rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 ring-1 ring-cyan-400/35'
+
+const drawerLink =
+  'flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white active:bg-white/10'
+
+const drawerLinkActive =
+  'flex items-center gap-3 rounded-xl bg-cyan-500/10 px-4 py-3 text-base font-semibold text-cyan-200 ring-1 ring-cyan-400/25'
+
+function HamburgerIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+      <rect x="3" y="5.5" width="16" height="1.75" rx="0.875" fill="currentColor" />
+      <rect x="3" y="10.125" width="16" height="1.75" rx="0.875" fill="currentColor" />
+      <rect x="3" y="14.75" width="16" height="1.75" rx="0.875" fill="currentColor" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 export function Layout() {
   const location = useLocation()
@@ -27,6 +51,9 @@ export function Layout() {
   const [donateOpen, setDonateOpen] = useState(false)
   const [adWatchOpen, setAdWatchOpen] = useState(false)
   const [subscribeOpen, setSubscribeOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  function closeMenu() { setMenuOpen(false) }
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
@@ -40,8 +67,126 @@ export function Layout() {
         <div className="tmo-grid-bg absolute inset-0 opacity-[0.35]" />
       </div>
 
+      {/* ── Drawer móvil ──────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Overlay */}
+            <motion.button
+              type="button"
+              aria-label="Cerrar menú"
+              className="fixed inset-0 z-40 bg-slate-950/75 backdrop-blur-sm sm:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeMenu}
+            />
+
+            {/* Panel lateral */}
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menú de navegación"
+              className="fixed right-0 top-0 z-50 flex h-dvh w-72 flex-col bg-slate-900 shadow-[−24px_0_64px_rgb(0_0_0_/_0.6)] sm:hidden"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+            >
+              {/* Cabecera del drawer */}
+              <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-4">
+                <span className="text-sm font-bold text-white tracking-tight">Menú</span>
+                <button
+                  type="button"
+                  aria-label="Cerrar menú"
+                  onClick={closeMenu}
+                  className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/[0.07] hover:text-white"
+                >
+                  <CloseIcon />
+                </button>
+              </div>
+
+              {/* Info de usuario (si está logueado) */}
+              {isLoggedIn && user && (
+                <div className="border-b border-white/[0.07] px-4 py-4">
+                  <p className="truncate text-sm font-semibold text-white">{user.name}</p>
+                  <p className="truncate text-xs text-slate-500">{user.email}</p>
+
+                  {/* Tokens */}
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-amber-200">🪙 {user.tokens} tokens</span>
+                    <button
+                      type="button"
+                      onClick={() => { closeMenu(); setAdWatchOpen(true) }}
+                      className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-bold text-amber-300 transition hover:bg-amber-500/30"
+                    >
+                      + Ver anuncio
+                    </button>
+                  </div>
+
+                  {/* Suscripción */}
+                  <button
+                    type="button"
+                    onClick={() => { closeMenu(); setSubscribeOpen(true) }}
+                    className={`mt-2.5 w-full rounded-xl py-2 text-sm font-semibold transition ${
+                      isActiveSubscription
+                        ? 'bg-violet-500/15 text-violet-200 ring-1 ring-violet-400/30 hover:bg-violet-500/25'
+                        : 'border border-slate-700 text-slate-300 hover:border-violet-500/40 hover:text-violet-200'
+                    }`}
+                  >
+                    {isActiveSubscription ? '⭐ Premium activo' : '⭐ Suscribirse · $2/mes'}
+                  </button>
+                </div>
+              )}
+
+              {/* Navegación */}
+              <nav className="flex-1 overflow-y-auto p-3" aria-label="Menú principal">
+                <div className="flex flex-col gap-0.5">
+                  <Link className={isHome ? drawerLinkActive : drawerLink} to="/" onClick={closeMenu}>
+                    🏠 Inicio
+                  </Link>
+                  <Link className={isGuardian ? drawerLinkActive : drawerLink} to="/guardian" onClick={closeMenu}>
+                    🛡️ Guardián
+                  </Link>
+                  <Link className={isAbout ? drawerLinkActive : drawerLink} to="/acerca" onClick={closeMenu}>
+                    ℹ️ Acerca de TMO
+                  </Link>
+                  {isLoggedIn && user && (
+                    <Link className={isAccount ? drawerLinkActive : drawerLink} to="/cuenta" onClick={closeMenu}>
+                      👤 Mi cuenta
+                    </Link>
+                  )}
+                </div>
+              </nav>
+
+              {/* Pie del drawer */}
+              <div className="border-t border-white/[0.07] p-4">
+                {isLoggedIn ? (
+                  <Link
+                    to="/cuenta"
+                    onClick={closeMenu}
+                    className="flex w-full items-center justify-center rounded-xl border border-slate-700 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                  >
+                    Ir a mi cuenta
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => { closeMenu(); setAuthOpen(true) }}
+                    className="w-full rounded-xl bg-cyan-500/15 py-2.5 text-sm font-semibold text-cyan-200 ring-1 ring-cyan-400/30 transition hover:bg-cyan-500/25"
+                  >
+                    Iniciar sesión
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-slate-950/75 shadow-[0_8px_32px_-8px_rgb(0_0_0_/_0.55)] backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
+          {/* Fila logo + controles móvil */}
           <div className="flex items-center justify-between gap-3 sm:justify-start">
             <Link
               to="/"
@@ -55,42 +200,33 @@ export function Layout() {
                 <p className="text-[11px] font-medium text-cyan-400/85">Lectura con Guardian</p>
               </div>
             </Link>
-            <nav
-              className="flex items-center gap-1 sm:hidden"
-              aria-label="Principal móvil"
-            >
-              <Link className={isHome ? navLinkActive : navLink} to="/">
-                Inicio
-              </Link>
-              <Link className={isGuardian ? navLinkActive : navLink} to="/guardian">
-                Guardián
-              </Link>
-              <Link className={isAbout ? navLinkActive : navLink} to="/acerca">
-                Acerca
-              </Link>
-              {isLoggedIn && user ? (
-                <Link
-                  className={isAccount ? navLinkActive : navLink}
-                  to="/cuenta"
-                >
-                  {user.name.slice(0, 10)}
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setAuthOpen(true)}
-                  className={navLink}
-                >
-                  Entrar
-                </button>
+
+            {/* Controles derechos en móvil */}
+            <div className="flex items-center gap-2 sm:hidden">
+              {isLoggedIn && user && (
+                <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-bold text-amber-200">
+                  🪙 {user.tokens}
+                </span>
               )}
-            </nav>
+              <button
+                type="button"
+                aria-label="Abrir menú"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen(true)}
+                className="rounded-xl p-2 text-slate-300 transition hover:bg-white/[0.07] hover:text-white"
+              >
+                <HamburgerIcon />
+              </button>
+            </div>
           </div>
+
           <SearchBar
             key={location.search}
             navigateOnSearch={!isHome}
             className="w-full flex-1 sm:max-w-md"
           />
+
+          {/* Navegación desktop */}
           <nav
             className="hidden items-center gap-1 sm:flex sm:gap-2"
             aria-label="Principal"
@@ -105,7 +241,6 @@ export function Layout() {
               Acerca
             </Link>
 
-            {/* Tokens + suscripción (solo desktop logueado) */}
             {isLoggedIn && user && (
               <>
                 {isActiveSubscription ? (

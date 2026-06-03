@@ -7,18 +7,21 @@ type Props = {
 
 export function AgeGateModal({ onConfirm, onDecline }: Props) {
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-4">
       <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md" />
 
       <motion.div
         role="dialog"
         aria-modal="true"
         aria-labelledby="age-gate-title"
-        className="relative z-10 w-full max-w-sm overflow-hidden rounded-3xl border border-white/[0.08] bg-slate-900 shadow-[0_32px_80px_-16px_rgb(0_0_0_/_0.8)] ring-1 ring-rose-500/20"
-        initial={{ opacity: 0, scale: 0.92, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative z-10 w-full max-w-sm overflow-hidden rounded-t-3xl border border-white/[0.08] bg-slate-900 shadow-[0_32px_80px_-16px_rgb(0_0_0_/_0.8)] ring-1 ring-rose-500/20 sm:rounded-3xl"
+        initial={{ y: '100%', opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: '100%', opacity: 0 }}
         transition={{ type: 'spring', stiffness: 340, damping: 28 }}
       >
+        {/* Drag handle */}
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-slate-700 sm:hidden" />
         <div className="relative overflow-hidden bg-gradient-to-br from-rose-500/12 via-slate-900 to-slate-900 px-6 pt-7 pb-5">
           <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-rose-500/15 blur-2xl" />
           <div className="relative text-center">

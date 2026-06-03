@@ -46,7 +46,7 @@ export function RegisterPage() {
         <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-cyan-400/90">
           TMO Secure · Registro
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-white">
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Crea tu cuenta
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-400">

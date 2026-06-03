@@ -34,7 +34,7 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[70] flex items-end justify-center p-0 sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -49,12 +49,15 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="auth-title"
-            className="relative z-10 w-full max-w-md rounded-2xl border border-white/[0.08] bg-slate-900 p-6 shadow-2xl ring-1 ring-cyan-500/20"
-            initial={{ scale: 0.96, y: 8 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.96, y: 8 }}
+            className="relative z-10 w-full max-w-md overflow-y-auto rounded-t-3xl border border-white/[0.08] bg-slate-900 p-6 shadow-2xl ring-1 ring-cyan-500/20 sm:rounded-2xl max-h-[92dvh]"
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', stiffness: 340, damping: 32 }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Drag handle en móvil */}
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-slate-700 sm:hidden" />
             {isLoggedIn && user ? (
               <>
                 <h2 id="auth-title" className="text-lg font-bold text-white">
