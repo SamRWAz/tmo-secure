@@ -5,13 +5,12 @@ import { catalog, coverAsset } from '../data/catalog'
 import { MangaCover } from './MangaCover'
 import { MangaGenreTags } from './MangaGenreTags'
 
-const FEATURED_IDS = ['neon-samurai', 'ink-memories', 'void-library', 'ghost-band']
+const FEATURED_IDS = ['guardian-code', 'ink-memories', 'echo-garden', 'ghost-band', 'summer-haze', 'cyber-healer']
 const INTERVAL_MS = 6000
 
 export function HeroSlider() {
-  const featured = FEATURED_IDS.map((id) => catalog.find((m) => m.id === id)).filter(
-    Boolean,
-  ) as typeof catalog
+  const featured = FEATURED_IDS.map((id) => catalog.find((m) => m.id === id))
+    .filter((m): m is (typeof catalog)[number] => !!m && !m.isAdult && !m.requiresTokens)
 
   const [idx, setIdx] = useState(0)
 

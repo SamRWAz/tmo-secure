@@ -49,6 +49,16 @@ export function MangaCard({ manga, index = 0 }: Props) {
           </motion.div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/20 to-transparent" />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-transparent to-indigo-600/0 opacity-0 transition-opacity duration-300 group-hover:opacity-25" />
+          {/* Badge adulto / premium */}
+          {manga.isAdult ? (
+            <div className="absolute right-2 top-2 rounded-full bg-rose-500/30 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-rose-100 ring-1 ring-rose-400/50 backdrop-blur-sm">
+              🔞
+            </div>
+          ) : manga.requiresTokens ? (
+            <div className="absolute right-2 top-2 rounded-full bg-amber-500/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-100 ring-1 ring-amber-400/40 backdrop-blur-sm">
+              🔒
+            </div>
+          ) : null}
           <div className="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
             <p className="line-clamp-2 text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_2px_8px_rgb(0_0_0_/_0.85)]">
               {manga.title}

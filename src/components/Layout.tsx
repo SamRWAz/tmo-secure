@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { useUser } from '../context/UserContext'
 import { AuthModal } from './AuthModal'
 import { DonateModal } from './DonateModal'
+import { AdWatchModal } from './AdWatchModal'
+import { SubscribeModal } from './SubscribeModal'
 import { SearchBar } from './SearchBar'
 
 const navLink =
@@ -20,9 +22,11 @@ export function Layout() {
   const isGuardian = location.pathname === '/guardian'
   const isAccount = location.pathname === '/cuenta'
   const isAbout = location.pathname === '/acerca'
-  const { user, isLoggedIn } = useUser()
+  const { user, isLoggedIn, isActiveSubscription, addTokens } = useUser()
   const [authOpen, setAuthOpen] = useState(false)
   const [donateOpen, setDonateOpen] = useState(false)
+  const [adWatchOpen, setAdWatchOpen] = useState(false)
+  const [subscribeOpen, setSubscribeOpen] = useState(false)
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-slate-950 text-slate-100">
@@ -100,6 +104,42 @@ export function Layout() {
             <Link className={isAbout ? navLinkActive : navLink} to="/acerca">
               Acerca
             </Link>
+
+            {/* Tokens + suscripción (solo desktop logueado) */}
+            {isLoggedIn && user && (
+              <>
+                {isActiveSubscription ? (
+                  <button
+                    type="button"
+                    onClick={() => setSubscribeOpen(true)}
+                    className="flex items-center gap-1.5 rounded-full bg-violet-500/15 px-3 py-1.5 text-xs font-bold text-violet-200 ring-1 ring-violet-400/35 transition hover:bg-violet-500/25"
+                    title="Suscripción activa"
+                  >
+                    ⭐ Premium
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSubscribeOpen(true)}
+                    className="flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:border-violet-500/40 hover:text-violet-200"
+                  >
+                    ⭐ Suscribirse
+                  </button>
+                )}
+                <div className="flex items-center gap-0.5 rounded-full border border-slate-700 bg-slate-900/60 pl-3 pr-1 py-1">
+                  <span className="text-xs font-semibold text-amber-200">🪙 {user.tokens}</span>
+                  <button
+                    type="button"
+                    onClick={() => setAdWatchOpen(true)}
+                    title="Ver un anuncio y ganar 3 tokens"
+                    className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20 text-[11px] font-bold text-amber-300 transition hover:bg-amber-500/35"
+                  >
+                    +
+                  </button>
+                </div>
+              </>
+            )}
+
             {isLoggedIn && user ? (
               <Link
                 className={
@@ -122,6 +162,12 @@ export function Layout() {
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
       <DonateModal open={donateOpen} onClose={() => setDonateOpen(false)} />
+      <AdWatchModal
+        open={adWatchOpen}
+        onClose={() => setAdWatchOpen(false)}
+        onEarned={(t) => addTokens(t)}
+      />
+      <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
 
       <main className="relative flex-1">
         <motion.div

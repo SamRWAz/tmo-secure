@@ -48,4 +48,8 @@ export type Manga = {
   /** Señales curadas por el Guardian para filtrar en el cliente */
   guardianTags: GuardianTag[]
   chapters: Chapter[]
+  /** El autor requiere compensación — se necesita suscripción o tokens para leer */
+  requiresTokens?: boolean
+  /** Contenido para mayores de 18 — oculto en inicio/recomendaciones */
+  isAdult?: boolean
 }

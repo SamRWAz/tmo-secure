@@ -73,14 +73,17 @@ export function getTopCategoriesFromHistory(
     .map(([cat]) => cat)
 }
 
-/** Recomienda por géneros pedidos (p. ej. “algo de acción”) */
+/** Catalogo sin contenido adulto — usado en todas las recomendaciones */
+const safeForRecommendation = catalog.filter((m) => !m.isAdult)
+
+/** Recomienda por generos pedidos (p. ej. "algo de accion") */
 export function recommendByCategories(
   categories: MangaCategory[],
   limit = 4,
 ): Manga[] {
   if (categories.length === 0) return []
 
-  const scored = catalog.map((manga) => {
+  const scored = safeForRecommendation.map((manga) => {
     const matches = categories.filter((c) => manga.categories.includes(c)).length
     return { manga, matches }
   })
@@ -103,7 +106,7 @@ export function recommendMangaForUser(limit = 4, userId = 'guest'): Manga[] {
   const readMangaIds = new Set(history.map((h) => h.mangaId))
   const topCats = getTopCategoriesFromHistory(3, userId)
 
-  const scored = catalog.map((manga) => {
+  const scored = safeForRecommendation.map((manga) => {
     let score = 0
     for (const cat of manga.categories) {
       const idx = topCats.indexOf(cat)

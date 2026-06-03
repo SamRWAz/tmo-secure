@@ -66,6 +66,8 @@ function ContinueReadingSection() {
     const seen = new Set<string>()
     const result: typeof history = []
     for (const entry of history) {
+      const m = getManga(entry.mangaId)
+      if (m?.isAdult) continue  // Excluir adultos del "continúa leyendo"
       if (!seen.has(entry.mangaId)) {
         seen.add(entry.mangaId)
         result.push(entry)
@@ -133,10 +135,16 @@ export function HomePage() {
 
   const baseList = useMemo(() => {
     let list = filterCatalogByGuardian(activeFilter.matches)
+    const hasSearch = searchQuery.length > 0
+    // En búsqueda explícita el adulto puede aparecer (la card lo indica)
+    // En vistas sin búsqueda se oculta completamente
+    if (!hasSearch) {
+      list = list.filter((m) => !m.isAdult)
+    }
     if (catParam) {
       list = list.filter((m) => m.categories.includes(catParam))
     }
-    if (searchQuery) {
+    if (hasSearch) {
       const ids = new Set(searchCatalog(searchQuery).map((m) => m.id))
       list = list.filter((m) => ids.has(m.id))
     }

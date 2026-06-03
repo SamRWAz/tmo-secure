@@ -1,4 +1,19 @@
-export type GuardianSpecies = 'cat' | 'dog' | 'fox' | 'owl' | 'raccoon' | 'bunny'
+export type GuardianSpecies =
+  | 'cat'
+  | 'dog'
+  | 'fox'
+  | 'owl'
+  | 'raccoon'
+  | 'bunny'
+  | 'wolf'
+  | 'dragon'
+  | 'bear'
+  | 'penguin'
+  | 'shark'
+  | 'robot'
+  | 'ninja'
+  | 'panda'
+  | 'ghost'
 
 export const GUARDIAN_SPECIES_OPTIONS: {
   id: GuardianSpecies
@@ -15,7 +30,7 @@ export const GUARDIAN_SPECIES_OPTIONS: {
   },
   {
     id: 'dog',
-    label: 'Perra de firewall',
+    label: 'Perro de firewall',
     emoji: '🐶',
     idleGreeting: 'Guau-guau. Circuito revisado: puedes seguir leyendo con calma.',
   },
@@ -42,6 +57,60 @@ export const GUARDIAN_SPECIES_OPTIONS: {
     label: 'Conejo encriptado',
     emoji: '🐰',
     idleGreeting: 'Hop-hop. Salté un par de trampas; todo suave por aquí.',
+  },
+  {
+    id: 'wolf',
+    label: 'Lobo guardián',
+    emoji: '🐺',
+    idleGreeting: 'Aúllido verificado. El perímetro digital está despejado, sigue leyendo.',
+  },
+  {
+    id: 'dragon',
+    label: 'Dragón firewall',
+    emoji: '🐉',
+    idleGreeting: 'Mis llamas consumen las amenazas antes de que lleguen a ti. Lectura segura.',
+  },
+  {
+    id: 'bear',
+    label: 'Oso encriptado',
+    emoji: '🐻',
+    idleGreeting: 'Grr. Revisé cada rincón del servidor. Puedes leer tranquilo.',
+  },
+  {
+    id: 'penguin',
+    label: 'Pingüino Linux',
+    emoji: '🐧',
+    idleGreeting: 'Kernel sin amenazas detectadas. Ruta limpia, código abierto y seguro.',
+  },
+  {
+    id: 'shark',
+    label: 'Tiburón de red',
+    emoji: '🦈',
+    idleGreeting: 'Patrullé el fondo de la red. No encontré nada malicioso. Buena lectura.',
+  },
+  {
+    id: 'robot',
+    label: 'Robot centinela',
+    emoji: '🤖',
+    idleGreeting: 'ESCANEO COMPLETADO. Amenazas: 0. Estado: óptimo. Procede con la lectura.',
+  },
+  {
+    id: 'ninja',
+    label: 'Ninja digital',
+    emoji: '🥷',
+    idleGreeting: 'Sombra limpia. Neutralicé las trampas en silencio. Nadie lo vio venir.',
+  },
+  {
+    id: 'panda',
+    label: 'Panda cifrado',
+    emoji: '🐼',
+    idleGreeting: 'Revisé el bambú digital y todo está seguro. Buen momento para leer.',
+  },
+  {
+    id: 'ghost',
+    label: 'Fantasma proxy',
+    emoji: '👻',
+    idleGreeting: 'Travesé los servidores sin dejar rastro. Tu sesión de lectura es invisible.',
   },
 ]
 

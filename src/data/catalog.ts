@@ -17,7 +17,9 @@ const rawCatalog = [
       'Un ronin cibernético patrulla calles lluviosas mientras corporaciones ocultan la verdad sobre el núcleo de la ciudad.',
     coverUrl: cover('neon-samurai'),
     categories: ['action', 'sci-fi', 'thriller'],
-    guardianTags: ['action', 'thriller', 'low-ads', 'simulated-risk'],
+    guardianTags: ['action', 'thriller', 'simulated-risk'],
+    requiresTokens: true,
+    isAdult: true,
     chapters: [
       { id: 'c1', number: 1, title: 'Lluvia ácida', unsafeRoute: false },
       { id: 'c2', number: 2, title: 'Espejo roto', unsafeRoute: false },
@@ -90,7 +92,8 @@ const rawCatalog = [
       'Pilotos adolescentes defienden la órbita terrestre frente a un enemigo que jamás muestra su forma completa.',
     coverUrl: cover('steel-orbit'),
     categories: ['action', 'sci-fi'],
-    guardianTags: ['mecha', 'action', 'low-ads', 'verified-safe'],
+    guardianTags: ['mecha', 'action', 'low-ads'],
+    requiresTokens: true,
     chapters: [
       { id: 'so1', number: 1, title: 'Lanzamiento', unsafeRoute: false },
       { id: 'so2', number: 2, title: 'Punto Lagrange', unsafeRoute: false },
@@ -119,7 +122,8 @@ const rawCatalog = [
       'Un detective solo puede ver huellas de crímenes que “aún no ocurrieron”. Cada caso lo acerca a su propio borrado.',
     coverUrl: cover('phantom-detective'),
     categories: ['thriller', 'drama'],
-    guardianTags: ['thriller', 'verified-safe', 'low-ads'],
+    guardianTags: ['thriller', 'low-ads'],
+    requiresTokens: true,
     chapters: [
       { id: 'pd1', number: 1, title: 'Caso -1', unsafeRoute: false },
       { id: 'pd2', number: 2, title: 'Sombra paralela', unsafeRoute: false },
@@ -149,6 +153,8 @@ const rawCatalog = [
     coverUrl: cover('drift-kings'),
     categories: ['action', 'thriller'],
     guardianTags: ['action', 'thriller', 'simulated-risk'],
+    requiresTokens: true,
+    isAdult: true,
     chapters: [
       { id: 'dk1', number: 1, title: 'Salida en falso', unsafeRoute: false },
       {

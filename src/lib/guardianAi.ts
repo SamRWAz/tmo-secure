@@ -48,9 +48,10 @@ const API_MODEL =
 
 function catalogForPrompt(): string {
   return catalog
+    .filter((m) => !m.isAdult)
     .map(
       (m) =>
-        `- id:${m.id} | ${m.title} | géneros: ${m.categories.map(getCategoryLabel).join(', ')} | nota: ${m.baseRating}`,
+        `- id:${m.id} | ${m.title} | géneros: ${m.categories.map(getCategoryLabel).join(', ')} | nota: ${m.baseRating}${m.requiresTokens ? ' | [premium]' : ''}`,
     )
     .join('\n')
 }
@@ -90,7 +91,9 @@ REGLAS:
 - Si piden recomendación sin historial, sugiere por género o los mejor valorados del catálogo.
 - Menciona títulos entre comillas «».
 - Respuestas concisas (máx. 4 oraciones salvo listas de recomendaciones).
-- Seguridad: redirecciones, scroll rápido = descargas falsas bloqueadas.`
+- Seguridad: redirecciones, scroll rápido = descargas falsas bloqueadas.
+- NUNCA menciones ni recomiendes contenido +18/adulto; ese catálogo no existe para ti.
+- Los mangas marcados [premium] requieren tokens o suscripción; puedes mencionarlo si el usuario pregunta.`
 }
 
 function formatMangaList(mangas: Manga[], intro: string): GuardianReply {

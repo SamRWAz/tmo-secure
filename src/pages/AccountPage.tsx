@@ -4,15 +4,27 @@ import { useUser } from '../context/UserContext'
 import { useReadingHistory } from '../context/ReadingHistoryContext'
 import { useGuardian } from '../context/GuardianContext'
 import { getDataSummary } from '../lib/userData'
+import { AdWatchModal } from '../components/AdWatchModal'
+import { SubscribeModal } from '../components/SubscribeModal'
 
 export function AccountPage() {
-  const { user, isLoggedIn, updateName, deleteReadingHistory, deleteAllData, logout } =
-    useUser()
+  const {
+    user,
+    isLoggedIn,
+    updateName,
+    deleteReadingHistory,
+    deleteAllData,
+    logout,
+    addTokens,
+    isActiveSubscription,
+  } = useUser()
   const { refreshHistory } = useReadingHistory()
   const { refreshSecurityEvents } = useGuardian()
   const [name, setName] = useState(user?.name ?? '')
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [adWatchOpen, setAdWatchOpen] = useState(false)
+  const [subscribeOpen, setSubscribeOpen] = useState(false)
 
   if (!isLoggedIn || !user) {
     return <Navigate to="/" replace />
@@ -65,6 +77,13 @@ export function AccountPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
+      <AdWatchModal
+        open={adWatchOpen}
+        onClose={() => setAdWatchOpen(false)}
+        onEarned={(t) => addTokens(t)}
+      />
+      <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
+
       <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-400/95">
         Tu espacio
       </p>
@@ -74,8 +93,55 @@ export function AccountPage() {
         tus datos cuando quieras.
       </p>
 
-      <section className="mt-8 rounded-2xl border border-white/[0.06] bg-slate-900/50 p-5 ring-1 ring-slate-800/80">
+      {/* Tokens y suscripción */}
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/[0.06] p-4 ring-1 ring-amber-400/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Tokens</p>
+              <p className="mt-1 text-3xl font-bold tabular-nums text-amber-200">🪙 {user.tokens}</p>
+            </div>
+          </div>
+          <p className="text-xs text-slate-500">1 token = 1 capítulo premium desbloqueado</p>
+          <button
+            type="button"
+            onClick={() => setAdWatchOpen(true)}
+            className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-500/20 transition text-center"
+          >
+            📺 Ver anuncio (+3 tokens)
+          </button>
+        </div>
+
+        <div className={`flex flex-col gap-3 rounded-2xl p-4 ${isActiveSubscription ? 'border border-violet-500/30 bg-violet-500/[0.08] ring-1 ring-violet-400/15' : 'border border-slate-700/50 bg-slate-900/50 ring-1 ring-slate-800'}`}>
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Suscripción</p>
+            {isActiveSubscription ? (
+              <>
+                <p className="mt-1 text-lg font-bold text-violet-200">⭐ Premium activo</p>
+                <p className="text-xs text-slate-400">Acceso ilimitado a contenido premium</p>
+              </>
+            ) : (
+              <>
+                <p className="mt-1 text-lg font-bold text-slate-300">Sin suscripción</p>
+                <p className="text-xs text-slate-500">Suscríbete por $2/mes</p>
+              </>
+            )}
+          </div>
+          {!isActiveSubscription && (
+            <button
+              type="button"
+              onClick={() => setSubscribeOpen(true)}
+              className="rounded-xl border border-violet-500/40 bg-violet-500/10 px-3 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20 transition"
+            >
+              ⭐ Suscribirse · $2/mes
+            </button>
+          )}
+        </div>
+      </div>
+
+      <section className="mt-6 rounded-2xl border border-white/[0.06] bg-slate-900/50 p-5 ring-1 ring-slate-800/80">
         <h2 className="text-sm font-semibold text-slate-100">Perfil</h2>
+        <p className="mt-1 text-xs text-slate-500">{user.email}</p>
         <form onSubmit={handleSaveName} className="mt-4 space-y-3">
           <div>
             <label htmlFor="account-name" className="text-xs text-slate-500">

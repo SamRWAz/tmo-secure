@@ -12,6 +12,7 @@ import { GuardianSettingsPage } from './pages/GuardianSettingsPage'
 import { AccountPage } from './pages/AccountPage'
 import { AboutPage } from './pages/AboutPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { RegisterPage } from './pages/RegisterPage'
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="guardian" element={<GuardianSettingsPage />} />
             <Route path="cuenta" element={<AccountPage />} />
             <Route path="acerca" element={<AboutPage />} />
+            <Route path="registro" element={<RegisterPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
